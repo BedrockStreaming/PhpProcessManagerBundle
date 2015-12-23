@@ -36,7 +36,7 @@ class HttpProcessCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('m6video:http-process')
+            ->setName('m6web:http-process')
             ->setDescription("CLI process for modern Request-Response Symfony Applications")
             ->addArgument(
                 'port',
