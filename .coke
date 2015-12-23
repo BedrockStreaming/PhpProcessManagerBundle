@@ -1,0 +1,10 @@
+# Standard used by PHP CodeSniffer (required)
+standard=vendor/m6web/symfony2-coding-standard/Symfony2
+
+# White list of files and directories (optional)
+.
+
+# Black list of files and directories (optional)
+!Tests/
+!vendor/
+!bin/
