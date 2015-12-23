@@ -1,0 +1,30 @@
+parameters:
+    m6_web_php_pm.react.event_loop.class : React\EventLoop\StreamSelectLoop
+    m6_web_php_pm.react.event_loop_factory.class : React\EventLoop\Factory
+    m6_web_php_pm.react.socket_server.class : React\Socket\Server
+    m6_web_php_pm.react.http_server.class : React\Http\Server
+    
+    m6_web_php_pm.bridge.http_kernel.class : M6Web\Bundle\PhpProcessManagerBundle\Bridge\HttpKernel
+    
+    m6_web_php_pm.event.command.class: M6Web\Bundle\PhpProcessManagerBundle\Event\Command
+
+services:
+    m6_web_php_pm.http_bridge:
+        class: %m6_web_php_pm.bridge.http_kernel.class%
+        arguments: [ '@kernel' ]
+        lazy: true
+    
+    m6_web_php_pm.react.loop:
+        class: %m6_web_php_pm.react.event_loop.class%
+        factory: [ %m6_web_php_pm.react.event_loop_factory.class%, create ]
+        lazy: true
+        
+    m6_web_php_pm.react.socket:
+        class: %m6_web_php_pm.react.socket_server.class%
+        arguments: [ '@m6_web_php_pm.react.loop' ]
+        lazy: true
+        
+    m6_web_php_pm.react.http_server:
+        class: %m6_web_php_pm.react.http_server.class%
+        arguments: [ '@m6_web_php_pm.react.socket' ]
+        lazy: true
