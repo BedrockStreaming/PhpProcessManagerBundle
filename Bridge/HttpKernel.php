@@ -33,8 +33,8 @@ class HttpKernel implements BridgeInterface
     /**
      * Handle a request
      *
-     * @param \React\Http\Request  $request
-     * @param \React\Http\Response $response
+     * @param ReactRequest  $request
+     * @param ReactResponse $response
      */
     public function onRequest(ReactRequest $request, ReactResponse $response)
     {
@@ -74,6 +74,7 @@ class HttpKernel implements BridgeInterface
      * Convert React\Http\Request to Symfony\Component\HttpFoundation\Request
      *
      * @param ReactRequest $reactRequest
+     * @param string       $content
      *
      * @return SymfonyRequest $symfonyRequest
      */
@@ -83,10 +84,10 @@ class HttpKernel implements BridgeInterface
         $headers = $reactRequest->getHeaders();
         $query   = $reactRequest->getQuery();
 
-        $post = array();
+        $post = [];
 
         // Parse body?
-        if (in_array(strtoupper($method), array('POST', 'PUT', 'DELETE', 'PATCH')) &&
+        if (in_array(strtoupper($method), ['POST', 'PUT', 'DELETE', 'PATCH']) &&
             isset($headers['Content-Type']) && (0 === strpos($headers['Content-Type'], 'application/x-www-form-urlencoded'))
         ) {
             parse_str($content, $post);
