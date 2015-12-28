@@ -2,6 +2,8 @@
 
 namespace M6Web\Bundle\PhpProcessManagerBundle\Bridge;
 
+use Symfony\Component\HttpKernel as SymfonyHttpKernel;
+
 use React\Http\Request as ReactRequest;
 use React\Http\Response as ReactResponse;
 
@@ -23,9 +25,9 @@ class HttpKernel implements BridgeInterface
     protected $application;
 
     /**
-     * @param \Symfony\Component\HttpKernel\HttpKernelInterface $application
+     * @param SymfonyHttpKernel\HttpKernelInterface $application
      */
-    public function __construct(\Symfony\Component\HttpKernel\HttpKernelInterface $application)
+    public function __construct(SymfonyHttpKernel\HttpKernelInterface $application)
     {
         $this->application = $application;
     }
@@ -63,7 +65,7 @@ class HttpKernel implements BridgeInterface
 
                 self::mapResponse($response, $symfonyResponse);
 
-                if ($this->application instanceof TerminableInterface) {
+                if ($this->application instanceof SymfonyHttpKernel\TerminableInterface) {
                     $this->application->terminate($symfonyRequest, $symfonyResponse);
                 }
             }
