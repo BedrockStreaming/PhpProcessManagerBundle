@@ -1,0 +1,13 @@
+Work in progress
+
+php app/console m6video:http-process 8080
+
+@todo : use Unix Domain Socket
+
+
+## Run command
+
+Availables options :
+
+- `--memory-max` - Gracefully stop running command when given memory volume, in bytes, is reached
+- `--check-interval` - Interval used to periodically check if we should stop the daemon
