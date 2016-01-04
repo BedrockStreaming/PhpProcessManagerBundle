@@ -1,5 +1,0 @@
-Work in progress
-
-php app/console m6web:http-process 8080
-
-@todo : use Unix Domain Socket
