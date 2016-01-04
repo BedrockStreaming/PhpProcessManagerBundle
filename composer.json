@@ -2,7 +2,7 @@
     "name": "m6web/php-process-manager-bundle",
     "type" : "symfony-bundle",
     "description": "Php Process Manger bundle",
-    "keywords": ["api", "exception", "bundle"],
+    "keywords": ["Process manager", "performance", "ReactPHP", "bundle"],
     "license" : "MIT",
     "authors": [
         {
