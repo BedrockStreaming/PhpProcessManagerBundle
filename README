@@ -1,5 +1,5 @@
 Work in progress
 
-php app/console m6video:http-process 8080
+php app/console m6web:http-process 8080
 
 @todo : use Unix Domain Socket
