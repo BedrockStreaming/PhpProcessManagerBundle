@@ -58,7 +58,7 @@ class HttpProcessCommand extends ContainerAwareCommand
                 'memory-max',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'Stop running command when given memory volume, in bytes, is reached',
+                'Stop running command when given memory volume, in megabytes, is reached',
                 0
             )
             ->addOption(
@@ -79,7 +79,7 @@ class HttpProcessCommand extends ContainerAwareCommand
         if (!is_integer($this->port) || ($this->port < 1) || ($this->port > 65535)) {
             throw new \InvalidArgumentException("Invalid argument port ".$this->port);
         }
-        $this->memoryMax = $input->getOption('memory-max');
+        $this->memoryMax = $input->getOption('memory-max') * 1024 * 2014;
 
         $container = $this->getContainer();
 
