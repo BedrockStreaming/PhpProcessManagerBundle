@@ -28,11 +28,17 @@ class HttpProcessCommand extends ContainerAwareCommand
      */
     protected $httpServer;
 
-
     /**
      * @var React\EventLoop\StreamSelectLoop
      */
     protected $loop;
+
+    /**
+     * Store max memory option value
+     *
+     * @var integer
+     */
+    protected $memoryMax = 0;
 
     /**
      * {@inheritDoc}
@@ -47,6 +53,19 @@ class HttpProcessCommand extends ContainerAwareCommand
                 'port',
                 InputArgument::REQUIRED,
                 'HTTP Port'
+            )
+            ->addOption(
+                'memory-max',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Stop running command when given memory volume, in megabytes, is reached',
+                0
+            )
+            ->addOption(
+                'check-interval',
+                null, InputOption::VALUE_OPTIONAL,
+                'Interval used to check periodically the daemon',
+                60
             );
     }
 
@@ -60,6 +79,7 @@ class HttpProcessCommand extends ContainerAwareCommand
         if (!is_integer($this->port) || ($this->port < 1) || ($this->port > 65535)) {
             throw new \InvalidArgumentException("Invalid argument port ".$this->port);
         }
+        $this->memoryMax = $input->getOption('memory-max') * 1024 * 2014;
 
         $container = $this->getContainer();
 
@@ -77,7 +97,40 @@ class HttpProcessCommand extends ContainerAwareCommand
         // Start listenning
         $this->socket->listen($this->port);
 
+        // Periodically call determining if we should stop or not
+        $this->loop->addPeriodicTimer($input->getOption('check-interval'), function () use ($output) {
+            if ($this->shouldExitCommand($output)) {
+                $this->loop->stop();
+                $this->writeln($output, 'Event loop stopped:'.$this->port);
+            }
+        });
+
         // Main loop
+        $this->writeln($output, 'Starting event loop:'.$this->port);
         $this->loop->run();
     }
+
+    /**
+     * determine if the event loop should be stopped
+     *
+     * @param OutputInterface $output
+     *
+     * @return bool
+     */
+    protected function shouldExitCommand(OutputInterface $output)
+    {
+        if ($this->memoryMax > 0 && memory_get_peak_usage(true) >= $this->memoryMax) {
+            $this->writeln($output, 'Memory max of '.$this->memoryMax.' bytes exideed');
+
+            return true;
+        }
+
+        return false;
+    }
+
+    protected static function writeln(OutputInterface $output, $line)
+    {
+        $output->writeln('['.date('c').'] '.$line);
+    }
+
 }
