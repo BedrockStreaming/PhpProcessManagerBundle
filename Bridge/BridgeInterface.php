@@ -2,6 +2,9 @@
 
 namespace M6Web\Bundle\PhpProcessManagerBundle\Bridge;
 
+
+use React\Http;
+
 /**
  * BridgeInterface
  *
@@ -11,8 +14,8 @@ interface BridgeInterface
     /**
      * Handle a request.
      *
-     * @param \React\Http\Request  $request
-     * @param \React\Http\Response $response
+     * @param Http\Request  $request
+     * @param Http\Response $response
      */
-    public function onRequest(\React\Http\Request $request, \React\Http\Response $response);
+    public function onRequest(Http\Request $request, Http\Response $response);
 }

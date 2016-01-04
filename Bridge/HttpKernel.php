@@ -2,6 +2,8 @@
 
 namespace M6Web\Bundle\PhpProcessManagerBundle\Bridge;
 
+use Symfony\Component\HttpKernel as SymfonyHttpKernel;
+
 use React\Http\Request as ReactRequest;
 use React\Http\Response as ReactResponse;
 
@@ -23,9 +25,9 @@ class HttpKernel implements BridgeInterface
     protected $application;
 
     /**
-     * @param \Symfony\Component\HttpKernel\HttpKernelInterface $application
+     * @param SymfonyHttpKernel\HttpKernelInterface $application
      */
-    public function __construct(\Symfony\Component\HttpKernel\HttpKernelInterface $application)
+    public function __construct(SymfonyHttpKernel\HttpKernelInterface $application)
     {
         $this->application = $application;
     }
@@ -33,8 +35,8 @@ class HttpKernel implements BridgeInterface
     /**
      * Handle a request
      *
-     * @param \React\Http\Request  $request
-     * @param \React\Http\Response $response
+     * @param ReactRequest  $request
+     * @param ReactResponse $response
      */
     public function onRequest(ReactRequest $request, ReactResponse $response)
     {
@@ -63,7 +65,7 @@ class HttpKernel implements BridgeInterface
 
                 self::mapResponse($response, $symfonyResponse);
 
-                if ($this->application instanceof TerminableInterface) {
+                if ($this->application instanceof SymfonyHttpKernel\TerminableInterface) {
                     $this->application->terminate($symfonyRequest, $symfonyResponse);
                 }
             }
@@ -74,6 +76,7 @@ class HttpKernel implements BridgeInterface
      * Convert React\Http\Request to Symfony\Component\HttpFoundation\Request
      *
      * @param ReactRequest $reactRequest
+     * @param string       $content
      *
      * @return SymfonyRequest $symfonyRequest
      */
@@ -83,10 +86,10 @@ class HttpKernel implements BridgeInterface
         $headers = $reactRequest->getHeaders();
         $query   = $reactRequest->getQuery();
 
-        $post = array();
+        $post = [];
 
         // Parse body?
-        if (in_array(strtoupper($method), array('POST', 'PUT', 'DELETE', 'PATCH')) &&
+        if (in_array(strtoupper($method), ['POST', 'PUT', 'DELETE', 'PATCH']) &&
             isset($headers['Content-Type']) && (0 === strpos($headers['Content-Type'], 'application/x-www-form-urlencoded'))
         ) {
             parse_str($content, $post);
