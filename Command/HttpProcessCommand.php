@@ -19,17 +19,17 @@ class HttpProcessCommand extends ContainerAwareCommand
     protected $port;
 
     /**
-     * @var React\Socket\Server
+     * @var \React\Socket\Server
      */
     protected $socket;
 
     /**
-     * @var React\Http\Server
+     * @var \React\Http\Server
      */
     protected $httpServer;
 
     /**
-     * @var React\EventLoop\StreamSelectLoop
+     * @var \React\EventLoop\StreamSelectLoop
      */
     protected $loop;
 
@@ -39,6 +39,13 @@ class HttpProcessCommand extends ContainerAwareCommand
      * @var integer
      */
     protected $memoryMax = 0;
+
+    /**
+     * Process return value
+     *
+     * @var integer
+     */
+    protected $returnValue = 0;
 
     /**
      * {@inheritDoc}
@@ -58,7 +65,7 @@ class HttpProcessCommand extends ContainerAwareCommand
                 'memory-max',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'Stop running command when given memory volume, in megabytes, is reached',
+                'Stop running command when given memory volume, in megabytes, is reached (exit 10)',
                 0
             )
             ->addOption(
@@ -102,12 +109,16 @@ class HttpProcessCommand extends ContainerAwareCommand
             if ($this->shouldExitCommand($output)) {
                 $this->loop->stop();
                 $this->writeln($output, 'Event loop stopped:'.$this->port);
+
+                $this->returnValue = 10;
             }
         });
 
         // Main loop
         $this->writeln($output, 'Starting event loop:'.$this->port);
         $this->loop->run();
+
+        return $this->returnValue;
     }
 
     /**
