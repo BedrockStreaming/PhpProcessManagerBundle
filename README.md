@@ -21,7 +21,7 @@ php app/console m6web:http-process [listening-port]
 
 Availables options :
 
-- `--memory-max` - Gracefully stop running command when given memory volume, in megabytes, is reached
+- `--memory-max` - Gracefully stop running command when given memory volume, in megabytes, is reached (exit 10)
 - `--check-interval` - Interval used to periodically check if we should stop the daemon
 
 ## Quick start
@@ -30,6 +30,12 @@ Install the bundle :
 
 ```bash
 composer require m6web/php-process-manager-bundle
+```
+
+In AppKernel.php :
+
+```php
+ new M6Web\Bundle\PhpProcessManagerBundle\M6WebPhpProcessManagerBundle(),
 ```
 
 Start the command :
@@ -42,11 +48,19 @@ And open http://localhost:8000 !
 
 ## Advanced setup (load balancing)
 
-### Composer
+### Symfony
+
+Install the bundle :
 
 ```bash
 composer require m6web/php-process-manager-bundle
 ```
+
+In AppKernel.php :
+
+```php
+ new M6Web\Bundle\PhpProcessManagerBundle\M6WebPhpProcessManagerBundle(),
+ ```
 
 ### [Supervisord](http://supervisord.org/)
 
