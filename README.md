@@ -9,10 +9,6 @@ This PHP process manager is Symfony specific and designed to be used with an pro
 
 Inspired from [php-pm](https://github.com/php-pm/php-pm).
 
-/!\ Work In Progress !
-
-@todo : use Unix Domain Socket
-
 ## Command
 
 ```bash
@@ -47,6 +43,8 @@ php app/console m6web:http-process 8000
 And open http://localhost:8000 !
 
 ## Advanced setup (load balancing)
+
+![Advanced setup (load balancing)](doc/PhpProcessManagerBundle.png)
 
 ### Symfony
 
