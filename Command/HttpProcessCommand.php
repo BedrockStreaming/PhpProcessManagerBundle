@@ -70,7 +70,8 @@ class HttpProcessCommand extends ContainerAwareCommand
             )
             ->addOption(
                 'check-interval',
-                null, InputOption::VALUE_OPTIONAL,
+                null,
+                InputOption::VALUE_OPTIONAL,
                 'Interval used to check periodically the daemon',
                 60
             );
@@ -143,5 +144,4 @@ class HttpProcessCommand extends ContainerAwareCommand
     {
         $output->writeln('['.date('c').'] '.$line);
     }
-
 }

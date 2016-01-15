@@ -1,7 +1,5 @@
 <?php
-
 namespace M6Web\Bundle\PhpProcessManagerBundle\Bridge;
-
 
 use React\Http;
 
