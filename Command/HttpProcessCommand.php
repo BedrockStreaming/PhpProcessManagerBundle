@@ -72,7 +72,7 @@ class HttpProcessCommand extends ContainerAwareCommand
                 'check-interval',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'Interval used to check periodically the daemon',
+                'Interval used to check periodically the daemon - in seconds',
                 60
             );
     }
