@@ -18,7 +18,7 @@ php app/console m6web:http-process [listening-port]
 Availables options :
 
 - `--memory-max` - Gracefully stop running command when given memory volume, in megabytes, is reached (exit 10)
-- `--check-interval` - Interval used to periodically check if we should stop the daemon
+- `--check-interval` - Interval used to periodically check if we should stop the daemon (in seconds)
 
 ## Quick start
 
