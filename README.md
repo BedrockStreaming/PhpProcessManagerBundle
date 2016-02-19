@@ -82,14 +82,14 @@ Example config for NGiNX and 8 workers:
 
 ```nginx
 upstream backend  {
-    server 127.0.0.1:8000;
-    server 127.0.0.1:8001;
-    server 127.0.0.1:8002;
-    server 127.0.0.1:8003;
-    server 127.0.0.1:8004;
-    server 127.0.0.1:8005;
-    server 127.0.0.1:8006;
-    server 127.0.0.1:8007;
+    server 127.0.0.1:8000 max_fails=1 fail_timeout=5s;
+    server 127.0.0.1:8001 max_fails=1 fail_timeout=5s;
+    server 127.0.0.1:8002 max_fails=1 fail_timeout=5s;
+    server 127.0.0.1:8003 max_fails=1 fail_timeout=5s;
+    server 127.0.0.1:8004 max_fails=1 fail_timeout=5s;
+    server 127.0.0.1:8005 max_fails=1 fail_timeout=5s;
+    server 127.0.0.1:8006 max_fails=1 fail_timeout=5s;
+    server 127.0.0.1:8007 max_fails=1 fail_timeout=5s;
 }
 
 server {
@@ -100,7 +100,59 @@ server {
     }
     location @backend {
         proxy_pass http://backend;
+        proxy_next_upstream http_502 timeout error;
+        proxy_connect_timeout 1;
+        proxy_send_timeout 5;
+        proxy_read_timeout 5;
     }
 }
 ```
 
+Example config for NGiNX and 8 workers with fallback on php-fpm:
+
+```nginx
+upstream backend  {
+    server 127.0.0.1:8000 max_fails=1 fail_timeout=5s;
+    server 127.0.0.1:8001 max_fails=1 fail_timeout=5s;
+    server 127.0.0.1:8002 max_fails=1 fail_timeout=5s;
+    server 127.0.0.1:8003 max_fails=1 fail_timeout=5s;
+    server 127.0.0.1:8004 max_fails=1 fail_timeout=5s;
+    server 127.0.0.1:8005 max_fails=1 fail_timeout=5s;
+    server 127.0.0.1:8006 max_fails=1 fail_timeout=5s;
+    server 127.0.0.1:8007 max_fails=1 fail_timeout=5s;
+}
+
+server {
+    root /path/to/symfony/web/;
+    server_name servername.com;
+
+    location / {
+        try_files $uri @phppm;
+    }
+
+    location @phppm {
+        proxy_pass http://backend;
+        proxy_next_upstream http_502 timeout error;
+        proxy_connect_timeout 1;
+        proxy_send_timeout 5;
+        proxy_read_timeout 5;
+
+        proxy_intercept_errors on;
+        recursive_error_pages on;
+        error_page 502 = @phpfpm;
+    }
+
+    location @phpfpm {
+        try_files $uri /app_local.php$is_args$args;
+    }
+
+    location ~ ^/app_local\.php(/|$) {
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+
+        include       /etc/nginx/fastcgi_params;
+
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_pass  unix:/var/run/php-fpm/www.sock;
+    }
+}
+```
