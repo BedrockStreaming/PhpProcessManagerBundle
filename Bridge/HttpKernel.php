@@ -55,10 +55,14 @@ class HttpKernel implements BridgeInterface
                 try {
                     // Execute
                     $symfonyResponse = $this->application->handle($symfonyRequest);
-                } catch (\Exception $exception) {
-                    // Internal server error
-                    $response->writeHead(500);
-                    $response->end();
+                } catch (\Throwable $t) {
+                    // Executed only in PHP 7, will not match in PHP 5.x
+                    $this->fatalError($response, $t);
+
+                    return;
+                } catch (\Exception $e) {
+                    // Executed only in PHP 5.x, will not be reached in PHP 7
+                    $this->fatalError($response, $e);
 
                     return;
                 }
@@ -70,6 +74,21 @@ class HttpKernel implements BridgeInterface
                 }
             }
         });
+    }
+
+    /**
+     * Manager Internal server error
+     *
+     * @param ReactResponse $response
+     * @param Exception|Throwable $error
+     */
+    protected function fatalError(ReactResponse $response, $error)
+    {
+        $response->writeHead(500);
+        $response->write(
+            sprintf("Internal server error : %s", $error->getMessage())
+        );
+        $response->end();
     }
 
     /**
