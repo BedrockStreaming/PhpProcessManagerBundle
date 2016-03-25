@@ -12,15 +12,15 @@
         }
     ],
     "require": {
-        "php": ">=5.5",
-        "symfony/symfony"                : "~2.7",
-        "react/react"                    : "~0.4"
+        "php": "^5.5|^7.0",
+        "symfony/symfony"                : "^2.7|^3.0",
+        "react/react"                    : "^0.4"
         
     },
     "require-dev": {
-        "atoum/atoum"                    : "~2.1",
-        "m6web/coke"                     : "~2.1",
-        "m6web/symfony2-coding-standard" : "~3.1"
+        "atoum/atoum"                    : "^2.1",
+        "m6web/coke"                     : "^2.1",
+        "m6web/symfony2-coding-standard" : "^3.1"
     },
     "autoload": {
         "psr-4": {
