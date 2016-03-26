@@ -9,6 +9,9 @@ branches:
   only:
     - master
 
+before_script:
+  - phpenv config-rm xdebug.ini
+
 install:
     - composer install -n --dev
 
