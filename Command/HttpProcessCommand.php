@@ -19,6 +19,11 @@ class HttpProcessCommand extends ContainerAwareCommand
     protected $port;
 
     /**
+     * @var string
+     */
+    protected $host;
+
+    /**
      * @var \React\Socket\Server
      */
     protected $socket;
@@ -62,6 +67,13 @@ class HttpProcessCommand extends ContainerAwareCommand
                 'HTTP Port'
             )
             ->addOption(
+                'host',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'HTTP Host',
+                '127.0.0.1'
+            )
+            ->addOption(
                 'memory-max',
                 null,
                 InputOption::VALUE_OPTIONAL,
@@ -88,6 +100,7 @@ class HttpProcessCommand extends ContainerAwareCommand
             throw new \InvalidArgumentException("Invalid argument port ".$this->port);
         }
         $this->memoryMax = $input->getOption('memory-max') * 1024 * 2014;
+        $this->host = $input->getOption('host');
 
         $container = $this->getContainer();
 
@@ -103,7 +116,7 @@ class HttpProcessCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // Start listenning
-        $this->socket->listen($this->port);
+        $this->socket->listen($this->port, $this->host);
 
         // Periodically call determining if we should stop or not
         $this->loop->addPeriodicTimer($input->getOption('check-interval'), function () use ($output) {
