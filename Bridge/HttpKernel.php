@@ -50,7 +50,7 @@ class HttpKernel implements BridgeInterface
             $content.= $data;
             // Handle request after receive
             if (strlen($content) >= $contentLength) {
-                $symfonyRequest = self::mapRequest($request, $content);
+                $symfonyRequest = static::mapRequest($request, $content);
 
                 try {
                     // Execute
@@ -67,7 +67,7 @@ class HttpKernel implements BridgeInterface
                     return;
                 }
 
-                self::mapResponse($response, $symfonyResponse);
+                static::mapResponse($response, $symfonyResponse);
 
                 if ($this->application instanceof SymfonyHttpKernel\TerminableInterface) {
                     $this->application->terminate($symfonyRequest, $symfonyResponse);
