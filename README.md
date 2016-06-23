@@ -5,7 +5,7 @@ PHP Process Manager Bundle for Symfony Applications
 
 To kill the expensive bootstrap of PHP and Symfony, this bundle add a simple symfony command to start a process manager using ReactPHP.
 
-This PHP process manager is Symfony specific and designed to be used with an process control system like [supervisord](http://supervisord.org/) - more reliable and avoid reinventing the wheel.
+This PHP process manager is Symfony specific and designed to be used with a process control system like [supervisord](http://supervisord.org/) - more reliable and avoid reinventing the wheel.
 
 Inspired from [php-pm](https://github.com/php-pm/php-pm).
 
