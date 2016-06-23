@@ -99,7 +99,7 @@ class HttpProcessCommand extends ContainerAwareCommand
         if (!is_integer($this->port) || ($this->port < 1) || ($this->port > 65535)) {
             throw new \InvalidArgumentException("Invalid argument port ".$this->port);
         }
-        $this->memoryMax = $input->getOption('memory-max') * 1024 * 2014;
+        $this->memoryMax = $input->getOption('memory-max') * 1024 * 1024;
         $this->host = $input->getOption('host');
 
         $container = $this->getContainer();
