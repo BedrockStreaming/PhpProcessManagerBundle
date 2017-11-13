@@ -10,19 +10,19 @@ parameters:
 
 services:
     m6_web_php_pm.http_bridge:
-        class: %m6_web_php_pm.bridge.http_kernel.class%
+        class: '%m6_web_php_pm.bridge.http_kernel.class%'
         arguments: [ '@kernel' ]
     
     m6_web_php_pm.react.loop:
-        class: %m6_web_php_pm.react.event_loop.class%
+        class: '%m6_web_php_pm.react.event_loop.class%'
         factory: [ %m6_web_php_pm.react.event_loop_factory.class%, create ]
         
     m6_web_php_pm.react.socket:
-        class: %m6_web_php_pm.react.socket_server.class%
+        class: '%m6_web_php_pm.react.socket_server.class%'
         arguments: [ '@m6_web_php_pm.react.loop' ]
         
     m6_web_php_pm.react.http_server:
-        class: %m6_web_php_pm.react.http_server.class%
+        class: '%m6_web_php_pm.react.http_server.class%'
         arguments: [ '@m6_web_php_pm.react.socket' ]
         calls:
           - [ on, [ 'request', [ '@m6_web_php_pm.http_bridge', 'onRequest' ] ] ]
